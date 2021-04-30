@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+
+{% block main %}
+    <div style="display: flex">
+        <button class="btn" id="backto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+            </svg>
+        </button>
+        <div style="margin:10px auto;font-size: 18px">记录生活 记录你</div>
+    </div>
+
+    <div class="form">
+        <div class="title">
+            <div style="margin-top: 20px;margin-bottom: 7px">标题:</div>
+            <input type="text" name="title" style="width: 700px;height: 40px;border: 1px solid lightgray" id="title"/>
+        </div>
+        <div>
+            <div style="margin-top: 20px;margin-bottom: 7px">内容:</div>
+            <textarea type="text" name="desc" class="desc" id="desc" style="border: 1px solid lightgray""></textarea>
+        </div>
+
+        <button class="btn" id="submit">提交</button>
+
+    </div>
+    <style>
+        .form {
+            flex-flow: wrap;
+        }
+
+        .title {
+            width: 700px;
+        }
+
+        .desc {
+            width: 700px;
+            height: 400px;
+        }
+
+        #submit {
+            margin-top: 10px;
+            width: 700px;
+        }
+    </style>
+    <script>
+        var id = GetUrlParam('id');
+        if (id) {
+            $.ajax({
+                    type: 'get',
+                    url: '/api/memo/' + id,
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data)
+                        $('#title').val(data.title)
+                        $('#desc').val(data.desc)
+                    }
+                }
+            )
+        }
+        $('#submit').on('click', function () {
+            if (id) {
+                updateMemo()
+            } else {
+                addMemo()
+            }
+
+        })
+        $('#backto').on('click', function () {
+            window.location.href = "/"
+        })
+
+        function updateMemo() {
+            $.ajax({
+                    type: 'put',
+                    url: '/api/memo/' + id ,
+                    data: {
+                        title: $('#title').val(),
+                        desc: $('#desc').val()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        window.location.href = '/'
+                    }
+                }
+            )
+        }
+
+        function addMemo() {
+            $.ajax({
+                    type: 'post',
+                    url: '/api/memo/',
+                    data: {
+                        title: $('#title').val(),
+                        desc: $('#desc').val()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data)
+                        $('#detail').text(data.desc)
+                        window.location.href = '/'
+                    }
+                }
+            )
+        }
+
+    </script>
+{% endblock main %}

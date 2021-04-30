@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+
+{% block main %}
+    <div class="btn-group" style="margin-bottom: 10px;width: 30px">
+        <button class="btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                 class="bi bi-bookmark-plus"
+                 viewBox="0 0 16 16">
+                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5A.5.5 0 0 1 8 4z"/>
+            </svg>
+        </button>
+    </div>
+
+    <div id="container"></div>
+
+
+    <script>
+        String.prototype.format = function () {
+            var args = Array.prototype.slice.call(arguments);
+            var count = 0;
+            return this.replace(/%s/g, function (s, i) {
+                return args[count++];
+            });
+        };
+        $('.btn').on("click", function () {
+            window.location.href = "add/"
+        })
+        $.ajax({
+            type: 'get',
+            url: '/api/memo/',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data)
+                var html = '';
+                var str = '<div class="article">\n' +
+                    '        <div class="flag flag-left">备忘</div>\n' +
+                    '        <article class="post post-%s">\n' +
+                    '            <header class="entry-header">\n' +
+                    '                <h1 class="entry-title">\n' +
+                    '                    <a href="/details/?id=%s">%s</a>\n' +
+                    '                </h1>\n' +
+                    '                <div class="entry-meta">\n' +
+                    '                    <span class=""><a href="#">%s</a></span>\n' +
+                    '                </div>\n' +
+                    '            </header>\n' +
+                    '            <div class="entry-content clearfix">\n' +
+                    '                <div class="read-more cl-effect-14">\n' +
+                    '                    <a href="/details/?id=%s" class="more-link">继续阅读 <span class="meta-nav">→</span></a>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '        </article>\n' +
+                    '    </div>';
+                for (var i = 0; i < data.length; i++) {
+                    html += str.format(data[i].id, data[i].id, data[i].title, data[i].create_time, data[i].id)
+                }
+                $('#container').html(html);
+
+            },
+            error: function (jqXHR) {
+                console.log(jqXHR);
+            }
+        })
+    </script>
+    <style>
+        .post {
+            border: 1px solid lightgray;
+            box-shadow: 4px 4px 3px #888888;
+            margin-bottom: 10px;
+            width: 700px;
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article {
+            width: 700px;
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .article .flag {
+            position: absolute; /*绝对定位*/
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            width: 74px;
+            background-color: #FF5722;
+            color: #fff;
+            z-index: 999;
+        }
+
+        .article .flag-left {
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            left: -18px;
+            top: 9px;
+        }
+
+        .article .flag-right {
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+            right: -18px;
+            top: 9px;
+        }
+        .article:hover{
+border: 1px solid lightgray;
+            box-shadow: 4px 4px 3px lightblue;
+        }
+    </style>
+{% endblock main %}

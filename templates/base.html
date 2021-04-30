@@ -1,0 +1,95 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>备忘录|notebook</title>
+
+    <!-- meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- css -->
+    <link rel="stylesheet" href="{% static 'blog/css/pace.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-theme.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/highlights/github.css' %}">
+    <!-- js -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'blog/js/pace.min.js' %}"></script>
+    <script src="{% static 'blog/js/modernizr.custom.js' %}"></script>
+    <script>
+        function GetUrlParam(paraName) {
+            var url = document.location.toString();
+            var arrObj = url.split("?");
+
+            if (arrObj.length > 1) {
+                var arrPara = arrObj[1].split("&");
+                var arr;
+
+                for (var i = 0; i < arrPara.length; i++) {
+                    arr = arrPara[i].split("=");
+
+                    if (arr != null && arr[0] == paraName) {
+                        return arr[1];
+                    }
+                }
+                return "";
+            } else {
+                return "";
+            }
+        }
+    </script>
+</head>
+
+<body>
+<div class="container">
+    <header class="dingbu">
+        <div style="padding:30px 0px 15px 0px">
+            <p style="font-size:14px;letter-spacing:14px;margin:5px 5px 5px 17px;color:black;">
+                备忘录
+            </p>
+        </div>
+    </header>
+</div>
+<div class="content-body">
+    <div class="container">
+        <div class="row">
+            <main class="col-md-8 ccc">
+                {% block main %}
+                {% endblock main %}
+            </main>
+        </div>
+    </div>
+</div>
+<footer id="site-footer">
+
+</footer>
+<style>
+    .dingbu {
+        position: relative;
+        background-image: url("/static/b1.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        text-align: center;
+        margin-bottom: 0px;
+        color: white;
+        width: 100%;
+    }
+    .container {
+        width: 100%;
+    }
+    .ccc {
+        margin-top: 20px;
+        text-align: left;
+        {#margin: 40px 300px;#}
+        width: 40%;
+        left: 30%;
+    }
+    .row {
+        position: relative;
+    }
+</style>
+</body>
+</html>

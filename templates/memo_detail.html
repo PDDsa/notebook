@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+
+{% block main %}
+    <button class="btn" id="back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+             class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                  d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+        </svg>
+    </button>
+    <button class="btn" id="modify">修改</button>
+    <button class="btn" id="delete">删除</button>
+    <div class="content">
+        <div id="detail"></div>
+    </div>
+    <script>
+        var id = GetUrlParam('id');
+        {#console.log('id', id)#}
+        String.prototype.format = function () {
+            var args = Array.prototype.slice.call(arguments);
+            var count = 0;
+            return this.replace(/%s/g, function (s, i) {
+                return args[count++];
+            });
+        };
+        $('#back').on("click", function () {
+            window.location.href = "/"
+        })
+        $('#modify').on('click', function () {
+            window.location.href = "/add?id=" + id + '/'
+        })
+        $('#delete').on("click", function () {
+            $.ajax({
+                    type: 'delete',
+                    url: '/api/memo/' + id + '/',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data)
+                        window.location.href = "/"
+                    }
+                }
+            )
+        })
+
+        $.ajax({
+                type: 'get',
+                url: '/api/memo/' + id + '/',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data)
+                    $('#detail').text(data.desc)
+                }
+            }
+        )
+    </script>
+    <style>
+        #detail {
+            text-align: left;
+            margin: 10px auto;
+        {#border:2px solid lightgray;#}{#box-shadow: 10px 10px 5px #888888;#}
+        }
+
+        .content {
+            margin-top: 30px;
+        }
+    </style>
+{% endblock main %}
